@@ -27,3 +27,28 @@ const initializeDBAndServer = async () => {
 };
 
 initializeDBAndServer();
+
+//GET Movies Details API
+app.get("/movies/", async (request, response) => {
+  const getMoviesQuery = `
+        SELECT 
+          *
+        FROM 
+          movie;
+    `;
+
+  const dbObject = await db.all(getMoviesQuery);
+
+  //converting into required response
+  const convertObjectToResponse = (dbObject) => {
+    return {
+      movieName: dbObject.movie_name,
+    };
+  };
+  let moviesDetails = [];
+  for (let obj of dbObject) {
+    moviesDetails.push(convertObjectToResponse(obj));
+  }
+
+  response.send(moviesDetails);
+});
