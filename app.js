@@ -101,3 +101,21 @@ app.get("/movies/:movieId/", async (request, response) => {
 
   response.send(convertObjectToResponse(dbObject));
 });
+
+//UPDATE Movie Details API
+app.put("/movies/:movieId", async (request, response) => {
+  const { movieId } = request.params;
+  const movieDetails = request.body;
+  const { directorId, movieName, leadActor } = movieDetails;
+
+  const updateMovieQuery = `
+        UPDATE 
+          movie 
+        SET 
+          director_id = '${directorId}',
+          movie_name = '${movieName}',
+          lead_actor = '${leadActor}';
+    `;
+  await db.run(updateMovieQuery);
+  response.send("Movie Details Updated");
+});
