@@ -1,6 +1,7 @@
 const express = require("express");
 
 const app = express();
+app.use(express.json());
 
 const { open } = require("sqlite");
 const sqlite3 = require("sqlite3");
@@ -51,4 +52,25 @@ app.get("/movies/", async (request, response) => {
   }
 
   response.send(moviesDetails);
+});
+
+//ADD Movie details API
+app.post("/movies/", async (request, response) => {
+  const movieDetails = request.body;
+  const { directorId, movieName, leadActor } = movieDetails;
+
+  const addMovieQuery = `
+    INSERT INTO 
+      movie(director_id, movie_name, lead_actor)
+    VALUES (
+        '${directorId}',
+        '${movieName}',
+        '${leadActor}'
+    );
+  `;
+
+  const dbResponse = await db.run(addMovieQuery);
+  const movieId = dbResponse.lastID;
+  response.send("Movie Successfully Added");
+  //console.log(movieId);
 });
