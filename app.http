@@ -13,7 +13,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3000/movies/108/
+GET http://localhost:3000/movies/109/
 
 ###
 
@@ -25,5 +25,9 @@ Content-Type: application/json
   "movieName": "Thor",
   "leadActor": "Christopher Hemsworth"
 }
+
+###
+
+DELETE http://localhost:3000/movies/108/
 
 ###

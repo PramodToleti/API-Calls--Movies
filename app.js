@@ -88,18 +88,20 @@ app.get("/movies/:movieId/", async (request, response) => {
     `;
 
   const dbObject = await db.get(getMovieQuery);
-
-  //Converting to response
-  const convertObjectToResponse = (dbObject) => {
-    return {
-      movieId: dbObject.movie_id,
-      directorId: dbObject.director_id,
-      movieName: dbObject.movie_name,
-      leadActor: dbObject.lead_actor,
+  if (dbObject === undefined) {
+    response.send("Movie Not Found");
+  } else {
+    //Converting to response
+    const convertObjectToResponse = (dbObject) => {
+      return {
+        movieId: dbObject.movie_id,
+        directorId: dbObject.director_id,
+        movieName: dbObject.movie_name,
+        leadActor: dbObject.lead_actor,
+      };
     };
-  };
-
-  response.send(convertObjectToResponse(dbObject));
+    response.send(convertObjectToResponse(dbObject));
+  }
 });
 
 //UPDATE Movie Details API
@@ -118,4 +120,18 @@ app.put("/movies/:movieId", async (request, response) => {
     `;
   await db.run(updateMovieQuery);
   response.send("Movie Details Updated");
+});
+
+//REMOVE Movie Details API
+app.delete("/movies/:movieId", async (request, response) => {
+  const { movieId } = request.params;
+  const deleteMovieQuery = `
+        DELETE FROM 
+          movie
+        WHERE 
+          movie_id = ${movieId};
+    `;
+
+  await db.run(deleteMovieQuery);
+  response.send("Movie Removed");
 });
