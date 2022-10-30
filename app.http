@@ -31,3 +31,7 @@ Content-Type: application/json
 DELETE http://localhost:3000/movies/108/
 
 ###
+
+GET http://localhost:3000/directors/
+
+###

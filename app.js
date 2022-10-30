@@ -135,3 +135,27 @@ app.delete("/movies/:movieId", async (request, response) => {
   await db.run(deleteMovieQuery);
   response.send("Movie Removed");
 });
+
+//GET Directors Details API
+app.get("/directors/", async (request, response) => {
+  const getDirectorsQuery = `
+        SELECT 
+          * 
+        FROM 
+          director;
+    `;
+
+  const dbObject = await db.all(getDirectorsQuery);
+
+  const convertObjToResponse = (obj) => {
+    return {
+      directorId: obj.director_id,
+      directorName: obj.director_name,
+    };
+  };
+  let directorsDetails = [];
+  for (let obj of dbObject) {
+    directorsDetails.push(convertObjToResponse(obj));
+  }
+  response.send(directorsDetails);
+});
