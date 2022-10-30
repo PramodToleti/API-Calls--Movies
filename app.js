@@ -185,3 +185,5 @@ app.get("/directors/:directorId/movies/", async (request, response) => {
 
   response.send(moviesDetails);
 });
+
+module.exports = app;
