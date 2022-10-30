@@ -41,9 +41,9 @@ app.get("/movies/", async (request, response) => {
   const dbObject = await db.all(getMoviesQuery);
 
   //converting into required response
-  const convertObjectToResponse = (dbObject) => {
+  const convertObjectToResponse = (obj) => {
     return {
-      movieName: dbObject.movie_name,
+      movieName: obj.movie_name,
     };
   };
   let moviesDetails = [];
@@ -158,4 +158,30 @@ app.get("/directors/", async (request, response) => {
     directorsDetails.push(convertObjToResponse(obj));
   }
   response.send(directorsDetails);
+});
+
+//GET Movies of Director API
+app.get("/directors/:directorId/movies/", async (request, response) => {
+  const { directorId } = request.params;
+  const getDirectorMoviesQuery = `
+        SELECT 
+          *
+        FROM 
+          movie 
+        WHERE 
+          director_id = ${directorId};
+    `;
+
+  const dbResponse = await db.all(getDirectorMoviesQuery);
+  const convertObjectToResponse = (obj) => {
+    return {
+      movieName: obj.movie_name,
+    };
+  };
+  let moviesDetails = [];
+  for (let obj of dbResponse) {
+    moviesDetails.push(convertObjectToResponse(obj));
+  }
+
+  response.send(moviesDetails);
 });
